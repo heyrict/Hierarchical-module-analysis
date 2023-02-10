@@ -29,21 +29,21 @@ parfor sub=1:length(subjs)
     fmri = load(subfile).ROI_ts;
     %% individual static FC matrix and its hierarchical module partition
     FC=corr(fmri);
-	Clus_num = [];
-	Clus_size = [];
-	mFC = []
+    Clus_num = [];
+    Clus_size = [];
+    mFC = []
     try
-		[Clus_num,Clus_size,mFC] = Functional_HP(FC,N);
-	catch
-		warning(strcat("Error executing Functional_HP, Filename: ", subfile))
-		continue
-	end
+        [Clus_num,Clus_size,mFC] = Functional_HP(FC,N);
+    catch
+        warning(strcat("Error executing Functional_HP, Filename: ", subfile))
+        continue
+    end
     %parsave(subname,Clus_size,Clus_num,'_Clus.mat')
     %parsave(subname,FC,mFC,'_FC.mat')
     %% individual static integration component Hin and segragtion component Hse
     [Hin,Hse] =Balance(FC,N,Clus_size,Clus_num);
 
-	subjs_processed{sub} = subj
+    subjs_processed{sub} = subj
     fmrits{sub} = fmri';
     IN{sub} = Hin;
     IM{sub} = Hse;

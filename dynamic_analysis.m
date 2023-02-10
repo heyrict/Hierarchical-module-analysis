@@ -21,9 +21,9 @@ end
 for sub=1:N_sub;
     % Retrieve subject id from string
     subj = subjs{sub};
-	if length(subj) == 0 % Subject dropped in static analysis
-		continue;
-	end
+    if length(subj) == 0 % Subject dropped in static analysis
+        continue;
+    end
     if length(regexp(subj, "^sub.*\.mat$", "once")) == 0
         continue;
     end
@@ -40,18 +40,18 @@ for sub=1:N_sub;
     %    [Hin, Hse] = Balance(FC, N, Clus_size, Clus_num);
     %end
 
-	num_loops = floor((SeqLen - width) / step) + 1;
+    num_loops = floor((SeqLen - width) / step) + 1;
     IN={};IM={};
     parfor l=1:num_loops
-		t = (l - 1) * step + 1;
+        t = (l - 1) * step + 1;
         subdata=fmri(t:t+width-1, :);
         FC=corr(subdata);
-		try
-			[Clus_num,Clus_size] = Functional_HP(FC,N);
-		catch
-			warning(strcat("Error executing Functional_HP, Filename: ", subfile))
-			continue
-		end
+        try
+            [Clus_num,Clus_size] = Functional_HP(FC,N);
+        catch
+            warning(strcat("Error executing Functional_HP, Filename: ", subfile))
+            continue
+        end
         [Hin,Hse] =Balance(FC,N,Clus_size,Clus_num);
         IN{l} = Hin;
         IM{l} = Hse;
