@@ -11,7 +11,7 @@ truesubjs = {};
 for sub=1:N_sub % Loop through all files in directory
     % Retrieve subject id from string
     subj = subjs(sub).name;
-    if !length(regexp(subj, "^sub.*\\.mat$", "once"))
+    if length(regexp(subj, "^sub.*\.mat$", "once")) == 0
         continue;
     end
     truesubjs = [truesubjs, subj];
@@ -24,7 +24,7 @@ fmrits={};IN={};IM={};subjs_processed = {};
 parfor sub=1:length(subjs)
     subj = subjs{sub};
     subfile = strcat(fmridir, subj)
-    subname = regexprep(subj, "^(sub\\d+).*$", "$1");
+    subname = regexprep(subj, "^(sub\d+).*$", "$1");
 
     fmri = load(subfile).ROI_ts;
     %% individual static FC matrix and its hierarchical module partition

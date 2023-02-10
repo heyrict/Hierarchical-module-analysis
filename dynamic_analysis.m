@@ -24,11 +24,11 @@ for sub=1:N_sub;
 	if length(subj) == 0 % Subject dropped in static analysis
 		continue;
 	end
-    if !length(regexp(subj, "^sub.*\\.mat$", "once"))
+    if length(regexp(subj, "^sub.*\.mat$", "once")) == 0
         continue;
     end
     subfile = strcat(fmridir, subj)
-    subname = regexprep(subj, "^(sub\\d+).*$", "$1");
+    subname = regexprep(subj, "^(sub\d+).*$", "$1");
 
     fmri = load(subfile).ROI_ts;
 
