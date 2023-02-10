@@ -8,7 +8,6 @@ outputdir="/tmp/data/output/"
 fmridir = strcat(basedir, "par", sprintf("%d", N), "/")
 subjs = dir(fmridir);
 N_sub=length(subjs);
-Long_fmri=[];IN=[];IM=[];subnames={};
 truesubjs = {}
 for sub=1:N_sub % Loop through all files in directory
     % Retrieve subject id from string
@@ -25,15 +24,15 @@ if !isfolder(outputdir)
 end
 save("-7", strcat(outputdir, "subjects_static.mat"), 'subjs');
 
+fmrits={};IN={};IM={};
+
 %mypool=parpool('local',24,'IdleTimeout',240);
 parfor sub=1:length(subjs)
-    subj = char(subjs(sub))
+    subj = char(subjs(sub));
     subfile = strcat(fmridir, subj)
     subname = regexprep(subj, "^(sub\\d+).*$", "$1");
-    subnames = [subnames, subname];
 
     fmri = load(subfile).ROI_ts;
-    Long_fmri=[Long_fmri;fmri];
     %% individual static FC matrix and its hierarchical module partition
     FC=corr(fmri);
     [Clus_num,Clus_size,mFC] = Functional_HP(FC,N);
@@ -41,8 +40,14 @@ parfor sub=1:length(subjs)
     %parsave(subname,FC,mFC,'_FC.mat')
     %% individual static integration component Hin and segragtion component Hse
     [Hin,Hse] =Balance(FC,N,Clus_size,Clus_num);
-    IN=[IN;Hin];IM=[IM;Hse];
+
+    fmrits(sub) = fmri';
+    IN(sub) = Hin;
+    IM(sub) = Hse;
 end
+Long_fmri = cell2mat(fmrits)';
+IN = cell2mat(IN);
+IM = cell2mat(IM);
 
 save("-7", strcat(outputdir, "origin_Hb_static.mat"), 'IN', 'IM');
 
