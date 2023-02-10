@@ -31,7 +31,7 @@ for sub=1:N_sub;
 
     fmri = load(subfile).ROI_ts;
 
-    IN=[];IM=[];
+    IN={};IM={};
 
     % Use for parallelized computing
     %function [Hin, Hse] = CalcHStep(t)
@@ -46,8 +46,11 @@ for sub=1:N_sub;
         FC=corr(subdata);
         [Clus_num,Clus_size] = Functional_HP(FC,N);
         [Hin,Hse] =Balance(FC,N,Clus_size,Clus_num);
-        IN=[IN,Hin];IM=[IM,Hse];
+        IN(t) = Hin;
+        IM(t) = Hse;
     end
+    IN = cell2mat(IN);
+    IM = cell2mat(IM);
     Hins=[Hins;IN];
     Hses=[Hses;IM];
     [Hin] = individual_correction(IN,S.Hin(sub));
