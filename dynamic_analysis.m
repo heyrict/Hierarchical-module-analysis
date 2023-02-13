@@ -6,6 +6,8 @@ basedir="~/Programs/Hierarchical-module-analysis/data/signal/"
 outputdir="~/Programs/Hierarchical-module-analysis/output/"
 
 subjs = load(strcat(outputdir, sprintf("subjects_%d.mat", N))).subjs
+% Remove empty entries (subjects that failed in static analysis)
+subjs = subjs(~cellfun('isempty', subjs))
 
 fmridir = strcat(basedir, sprintf("par%d/", N))
 N_sub=length(subjs);
@@ -21,12 +23,6 @@ end
 for sub=1:N_sub;
     % Retrieve subject id from string
     subj = subjs{sub};
-    if length(subj) == 0 % Subject dropped in static analysis
-        continue;
-    end
-    if length(regexp(subj, "^sub.*\.mat$", "once")) == 0
-        continue;
-    end
     subfile = strcat(fmridir, subj)
     subname = regexprep(subj, "^(sub\d+).*$", "$1");
 

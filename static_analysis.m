@@ -55,7 +55,7 @@ IM = cell2mat(IM);
 if isfolder(outputdir) == 0
     mkdir(outputdir);
 end
-subjs = subjs_processed;
+subjs = subjs_processed(~cellfun('isempty', subjs_processed)); % Remove empty entries
 save(strcat(outputdir, sprintf("subjects_%d.mat", N)), 'subjs');
 save(strcat(outputdir, sprintf("origin_Hb_static_%d.mat", N)), 'IN', 'IM');
 
