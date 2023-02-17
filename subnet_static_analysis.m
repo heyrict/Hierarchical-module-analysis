@@ -37,15 +37,15 @@ for sub=1:length(subjs)
             network_start = network_cuts(network_id - 1);
         end
 
-        subnet = fmri(network_start:network_end, network_start:network_end);
+        subnet = fmri(:, network_start:network_end);
         fmrits{sub, network_id} = subnet';
         %% individual static FC matrix and its hierarchical module partition
-        FC=corr(fmri);
+        FC=corr(subnet);
         Clus_num = [];
         Clus_size = [];
         mFC = []
         try
-            [Clus_num,Clus_size,mFC] = Functional_HP(FC,N);
+            [Clus_num,Clus_size,mFC] = Functional_HP(FC, network_end - network_start + 1);
         catch
             warning(strcat("Error executing Functional_HP, Filename: ", subfile))
             continue
@@ -53,7 +53,7 @@ for sub=1:length(subjs)
         %parsave(subname,Clus_size,Clus_num,'_Clus.mat')
         %parsave(subname,FC,mFC,'_FC.mat')
         %% individual static integration component Hin and segragtion component Hse
-        [Hin,Hse] =Balance(FC,N,Clus_size,Clus_num);
+        [Hin,Hse] =Balance(FC,network_end - network_start + 1,Clus_size,Clus_num);
 
         IN{sub, network_id} = Hin;
         IM{sub, network_id} = Hse;
