@@ -64,5 +64,5 @@ for sub=1:N_sub;
     Z=[Z;Fre,DIn,DSe,In_time,Se_time];
 end
 
-save(strcat(outputdir, sprintf("Hb_dynamic_%d_w%d_s%d.mat", N, width, step)), 'Hins', 'Hses', 'cHins', 'cHses');
-save(strcat(outputdir, sprintf("measures_dynamic_%d_w%d_s%d.mat", N, width, step)), 'Z', 'SeqLen', 'width', 'step', 'TR');
+save(strcat(outputdir, sprintf("Hb_dynamic_subnet_%d_w%d_s%d.mat", N, width, step)), 'Hins', 'Hses', 'cHins', 'cHses');
+save(strcat(outputdir, sprintf("measures_dynamic_subnet_%d_w%d_s%d.mat", N, width, step)), 'Z', 'SeqLen', 'width', 'step', 'TR');
